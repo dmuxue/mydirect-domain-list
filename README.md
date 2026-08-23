@@ -1,0 +1,1 @@
+# mydirect-domain-list
