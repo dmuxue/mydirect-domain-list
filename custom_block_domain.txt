@@ -1,6 +1,10 @@
+dl.google.com-del
+cache.nixos.org
+copilot.microsoft.com
 hsex.tv
 mitce.net
 mitce.io
 llg01.com
 www.bing.com
 openwrt.org
+m78star.cloud
