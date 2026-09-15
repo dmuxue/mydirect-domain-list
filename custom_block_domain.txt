@@ -8,3 +8,8 @@ llg01.com
 www.bing.com
 openwrt.org
 m78star.cloud
+cursor.sh
+cursor.com
+cursorapi.com
+cursor-cdn.com
+workos.com
