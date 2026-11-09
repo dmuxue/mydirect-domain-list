@@ -13,3 +13,4 @@ cursor.com
 cursorapi.com
 cursor-cdn.com
 workos.com
+interstatebridge.org
