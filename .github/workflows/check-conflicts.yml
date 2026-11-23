@@ -1,0 +1,51 @@
+name: 域名列表互斥校验
+
+on:
+  push:
+    paths:
+      - '*.txt'
+      - '.github/workflows/check-conflicts.yml'
+  pull_request:
+    paths:
+      - '*.txt'
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 检查 direct/block/whitelist 是否有交集
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import sys
+          def load(path):
+              out = set()
+              with open(path, encoding='utf-8') as f:
+                  for line in f:
+                      s = line.strip().lower()
+                      if not s or s.startswith('#') or s.endswith('-del'):
+                          continue
+                      if s.endswith('.start') or s.endswith('.end'):
+                          continue
+                      out.add(s)
+              return out
+          direct = load('direct-domain-list.txt')
+          block  = load('custom_block_domain.txt')
+          white  = load('whitelist.txt')
+          print(f'direct={len(direct)} block={len(block)} whitelist={len(white)}')
+          failed = False
+          for name, a, b in (('direct ∩ block', direct, block),
+                             ('direct ∩ whitelist', direct, white),
+                             ('block ∩ whitelist', block, white)):
+              overlap = sorted(a & b)
+              if overlap:
+                  failed = True
+                  print(f'FAIL {name}: {overlap}')
+              else:
+                  print(f'OK {name}')
+          if failed:
+              print('请从其中一个列表删掉冲突域名后再提交')
+              sys.exit(1)
+          PY
